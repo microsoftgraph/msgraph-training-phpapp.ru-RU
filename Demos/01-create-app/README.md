@@ -1,0 +1,3 @@
+# <a name="completed-module-create-a-php-web-app"></a>Завершенный модуль: создание веб-приложения PHP
+
+Версия проекта в этом каталоге отражает выполнение руководства с помощью [создания веб-приложения PHP](https://docs.microsoft.com/graph/training/php-tutorial?tutorial-step=1). Если вы используете эту версию проекта, вам необходимо выполнить все остальные руководства, начиная с [регистрации приложения на портале](https://docs.microsoft.com/graph/training/php-tutorial?tutorial-step=2).
