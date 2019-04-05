@@ -1,41 +1,32 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-<span data-ttu-id="31a66-101">В этом упражнении вы создадите регистрацию нового веб-приложения Azure AD с помощью портала реестра приложений (ARP).</span><span class="sxs-lookup"><span data-stu-id="31a66-101">In this exercise, you will create a new Azure AD web application registration using the Application Registry Portal (ARP).</span></span>
+<span data-ttu-id="f95ff-101">В этом упражнении вы создадите регистрацию нового веб-приложения Azure AD с помощью центра администрирования Azure Active Directory.</span><span class="sxs-lookup"><span data-stu-id="f95ff-101">In this exercise, you will create a new Azure AD web application registration using the Azure Active Directory admin center.</span></span>
 
-1. <span data-ttu-id="31a66-102">Откройте браузер и перейдите на [портал регистрации приложений](https://apps.dev.microsoft.com).</span><span class="sxs-lookup"><span data-stu-id="31a66-102">Open a browser and navigate to the [Application Registration Portal](https://apps.dev.microsoft.com).</span></span> <span data-ttu-id="31a66-103">Вход с использованием **личной учетной записи** (с учетной записью Майкрософт) или **рабочей или учебНой учетной записи**.</span><span class="sxs-lookup"><span data-stu-id="31a66-103">Login using a **personal account** (aka: Microsoft Account) or **Work or School Account**.</span></span>
+1. <span data-ttu-id="f95ff-102">Откройте браузер и перейдите в [центр администрирования Azure Active Directory](https://aad.portal.azure.com).</span><span class="sxs-lookup"><span data-stu-id="f95ff-102">Open a browser and navigate to the [Azure Active Directory admin center](https://aad.portal.azure.com).</span></span> <span data-ttu-id="f95ff-103">Вход с использованием **личной учетной записи** (с учетной записью Майкрософт) или **рабочей или учебНой учетной записи**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-103">Login using a **personal account** (aka: Microsoft Account) or **Work or School Account**.</span></span>
 
-1. <span data-ttu-id="31a66-104">В верхней части страницы выберите **Добавить приложение** .</span><span class="sxs-lookup"><span data-stu-id="31a66-104">Select **Add an app** at the top of the page.</span></span>
+1. <span data-ttu-id="f95ff-104">Выберите **Azure Active Directory** в левой панели навигации, а затем выберите **Регистрация приложений (Предварительная версия)** в разделе **Управление**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-104">Select **Azure Active Directory** in the left-hand navigation, then select **App registrations (Preview)** under **Manage**.</span></span>
 
-    > [!NOTE]
-    > <span data-ttu-id="31a66-105">Если на странице отображается несколько кнопок **Добавить приложение** , выберите ту, которая соответствует списку **приложений** для конвергенции.</span><span class="sxs-lookup"><span data-stu-id="31a66-105">If you see more than one **Add an app** button on the page, select the one that corresponds to the **Converged apps** list.</span></span>
+    ![<span data-ttu-id="f95ff-105">Снимок экрана с регистрациями приложений</span><span class="sxs-lookup"><span data-stu-id="f95ff-105">A screenshot of the App registrations</span></span> ](./images/aad-portal-app-registrations.png)
 
-1. <span data-ttu-id="31a66-106">На странице **Регистрация приложения** задайте для параметра **имя приложения** значение учебное **руководство по диаграмме PHP** и нажмите кнопку **создать**.</span><span class="sxs-lookup"><span data-stu-id="31a66-106">On the **Register your application** page, set the **Application Name** to **PHP Graph Tutorial** and select **Create**.</span></span>
+1. <span data-ttu-id="f95ff-106">Нажмите кнопку **создать регистрацию**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-106">Select **New registration**.</span></span> <span data-ttu-id="f95ff-107">На странице **Регистрация приложения** задайте указанные ниже значения.</span><span class="sxs-lookup"><span data-stu-id="f95ff-107">On the **Register an application** page, set the values as follows.</span></span>
 
-    ![Снимок экрана: создание нового приложения на веб-сайте портала регистрации приложений](./images/arp-create-app-01.png)
+    - <span data-ttu-id="f95ff-108">Задайте \*\*\*\* для `PHP Graph Tutorial`параметра Name значение.</span><span class="sxs-lookup"><span data-stu-id="f95ff-108">Set **Name** to `PHP Graph Tutorial`.</span></span>
+    - <span data-ttu-id="f95ff-109">Установите **Поддерживаемые типы учетных** записей для **учетных записей в любом организационном каталоге и личных учетНых записях Майкрософт**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-109">Set **Supported account types** to **Accounts in any organizational directory and personal Microsoft accounts**.</span></span>
+    - <span data-ttu-id="f95ff-110">В разделе **URI перенаправления**установите первый раскрывающийся список `Web` и присвойте ему значение `http://localhost:8000/callback`.</span><span class="sxs-lookup"><span data-stu-id="f95ff-110">Under **Redirect URI**, set the first drop-down to `Web` and set the value to `http://localhost:8000/callback`.</span></span>
 
-1. <span data-ttu-id="31a66-108">На странице **Регистрация учебника PHP Graph** в разделе **свойства** скопируйте **идентификатор приложения** так, как он понадобится позже.</span><span class="sxs-lookup"><span data-stu-id="31a66-108">On the **PHP Graph Tutorial Registration** page, under the **Properties** section, copy the **Application Id** as you will need it later.</span></span>
+    ![Снимок страницы "регистрация приложения"](./images/aad-register-an-app.png)
 
-    ![Снимок экрана с ИДЕНТИФИКАТОРом только что созданного приложения](./images/arp-create-app-02.png)
+1. <span data-ttu-id="f95ff-112">Выберите **регистр**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-112">Choose **Register**.</span></span> <span data-ttu-id="f95ff-113">На странице **учебника по диаграмме PHP** СКОПИРУЙТЕ значение **идентификатора Application (Client)** и сохраните его, он понадобится на следующем шаге.</span><span class="sxs-lookup"><span data-stu-id="f95ff-113">On the **PHP Graph Tutorial** page, copy the value of the **Application (client) ID** and save it, you will need it in the next step.</span></span>
 
-1. <span data-ttu-id="31a66-110">ПроКрутите список вниз до раздела **секреты приложения** .</span><span class="sxs-lookup"><span data-stu-id="31a66-110">Scroll down to the **Application Secrets** section.</span></span>
+    ![Снимок экрана с ИДЕНТИФИКАТОРом приложения для новой регистрации приложения](./images/aad-application-id.png)
 
-    1. <span data-ttu-id="31a66-111">Выберите **создать новый пароль**.</span><span class="sxs-lookup"><span data-stu-id="31a66-111">Select **Generate New Password**.</span></span>
-    1. <span data-ttu-id="31a66-112">В диалоговом окне **новый пароль** в созданном пароле скопируйте содержимое поля так, как оно потребуется позже.</span><span class="sxs-lookup"><span data-stu-id="31a66-112">In the **New password generated** dialog, copy the contents of the box as you will need it later.</span></span>
+1. <span data-ttu-id="f95ff-115">Выберите **Сертификаты _амп_ секреты** в разделе **Управление**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-115">Select **Certificates & secrets** under **Manage**.</span></span> <span data-ttu-id="f95ff-116">Нажмите кнопку **создать секрет клиента** .</span><span class="sxs-lookup"><span data-stu-id="f95ff-116">Select the **New client secret** button.</span></span> <span data-ttu-id="f95ff-117">Введите значение в поле **Описание** и выберите один из вариантов исТечения **срока действия** и нажмите кнопку **добавить**.</span><span class="sxs-lookup"><span data-stu-id="f95ff-117">Enter a value in **Description** and select one of the options for **Expires** and choose **Add**.</span></span>
 
-        > [!IMPORTANT]
-        > <span data-ttu-id="31a66-113">Этот пароль никогда не отображается еще раз, поэтому убедитесь, что вы хотите скопировать его сейчас.</span><span class="sxs-lookup"><span data-stu-id="31a66-113">This password is never shown again, so make sure you copy it now.</span></span>
+    ![Снимок экрана: диалоговое окно добавления секрета клиента](./images/aad-new-client-secret.png)
 
-    ![Снимок экрана с новым паролем приложения](./images/arp-create-app-03.png)
+1. <span data-ttu-id="f95ff-119">Скопируйте значение секрета клиента, прежде чем покинуть эту страницу.</span><span class="sxs-lookup"><span data-stu-id="f95ff-119">Copy the client secret value before you leave this page.</span></span> <span data-ttu-id="f95ff-120">Это потребуется на следующем этапе.</span><span class="sxs-lookup"><span data-stu-id="f95ff-120">You will need it in the next step.</span></span>
 
-1. <span data-ttu-id="31a66-115">ПроКрутите окно вниз до раздела **платформы** .</span><span class="sxs-lookup"><span data-stu-id="31a66-115">Scroll down to the **Platforms** section.</span></span>
+    > [!IMPORTANT]
+    > <span data-ttu-id="f95ff-121">Этот секрет клиента никогда не отображается еще раз, поэтому убедитесь, что вы хотите скопировать его сейчас.</span><span class="sxs-lookup"><span data-stu-id="f95ff-121">This client secret is never shown again, so make sure you copy it now.</span></span>
 
-    1. <span data-ttu-id="31a66-116">Нажмите кнопку **Добавить платформу**.</span><span class="sxs-lookup"><span data-stu-id="31a66-116">Select **Add Platform**.</span></span>
-    1. <span data-ttu-id="31a66-117">В диалоговом окне **Добавление платформы** выберите **веб**.</span><span class="sxs-lookup"><span data-stu-id="31a66-117">In the **Add Platform** dialog, select **Web**.</span></span>
-
-        ![Снимок экрана: создание платформы для приложения](./images/arp-create-app-04.png)
-
-    1. <span data-ttu-id="31a66-119">В поле **веб-** платформа введите URL-адрес `http://localhost:8000/callback` для **URL-адресов перенаправления**.</span><span class="sxs-lookup"><span data-stu-id="31a66-119">In the **Web** platform box, enter the URL `http://localhost:8000/callback` for the **Redirect URLs**.</span></span>
-
-        ![Снимок экрана: недавно добавленная веб-платформа для приложения](./images/arp-create-app-05.png)
-
-1. <span data-ttu-id="31a66-121">ПроКрутите страницу вниз и выберите команду **сохранить**.</span><span class="sxs-lookup"><span data-stu-id="31a66-121">Scroll to the bottom of the page and select **Save**.</span></span>
+    ![Снимок экрана с недавно добавленным секретом клиента](./images/aad-copy-client-secret.png)
