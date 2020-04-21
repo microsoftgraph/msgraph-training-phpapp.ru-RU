@@ -4,105 +4,81 @@
 
 ## <a name="get-calendar-events-from-outlook"></a>Получение событий календаря из Outlook
 
-Для начала добавим контроллер для представления календаря. Создайте новый файл в `./app/Http/Controllers` папке с именем `CalendarController.php`и добавьте приведенный ниже код.
+1. Создайте новый файл в каталоге **./АПП/хттп/контроллерс** с именем `CalendarController.php`и добавьте следующий код.
 
-```php
-<?php
+    ```php
+    <?php
 
-namespace App\Http\Controllers;
+    namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Microsoft\Graph\Graph;
-use Microsoft\Graph\Model;
-use App\TokenStore\TokenCache;
+    use App\Http\Controllers\Controller;
+    use Illuminate\Http\Request;
+    use Microsoft\Graph\Graph;
+    use Microsoft\Graph\Model;
+    use App\TokenStore\TokenCache;
 
-class CalendarController extends Controller
-{
-  public function calendar()
-  {
-    $viewData = $this->loadViewData();
+    class CalendarController extends Controller
+    {
+      public function calendar()
+      {
+        $viewData = $this->loadViewData();
 
-    // Get the access token from the cache
-    $tokenCache = new TokenCache();
-    $accessToken = $tokenCache->getAccessToken();
+        // Get the access token from the cache
+        $tokenCache = new TokenCache();
+        $accessToken = $tokenCache->getAccessToken();
 
-    // Create a Graph client
-    $graph = new Graph();
-    $graph->setAccessToken($accessToken);
+        // Create a Graph client
+        $graph = new Graph();
+        $graph->setAccessToken($accessToken);
 
-    $queryParams = array(
-      '$select' => 'subject,organizer,start,end',
-      '$orderby' => 'createdDateTime DESC'
-    );
+        $queryParams = array(
+          '$select' => 'subject,organizer,start,end',
+          '$orderby' => 'createdDateTime DESC'
+        );
 
-    // Append query parameters to the '/me/events' url
-    $getEventsUrl = '/me/events?'.http_build_query($queryParams);
+        // Append query parameters to the '/me/events' url
+        $getEventsUrl = '/me/events?'.http_build_query($queryParams);
 
-    $events = $graph->createRequest('GET', $getEventsUrl)
-      ->setReturnType(Model\Event::class)
-      ->execute();
+        $events = $graph->createRequest('GET', $getEventsUrl)
+          ->setReturnType(Model\Event::class)
+          ->execute();
 
-    return response()->json($events);
-  }
-}
-```
+        return response()->json($events);
+      }
+    }
+    ```
 
-Рассмотрите, что делает этот код.
+    Рассмотрите, что делает этот код.
 
-- URL-адрес, который будет вызываться — это `/v1.0/me/events`.
-- `$select` Параметр позволяет ограничить поля, возвращаемые для каждого события, только теми, которые будут реально использоваться представлением.
-- `$orderby` Параметр сортирует результаты по дате и времени создания, начиная с самого последнего элемента.
+    - URL-адрес, который будет вызываться — это `/v1.0/me/events`.
+    - `$select` Параметр позволяет ограничить поля, возвращаемые для каждого события, только теми, которые будут реально использоваться представлением.
+    - `$orderby` Параметр сортирует результаты по дате и времени создания, начиная с самого последнего элемента.
 
-Обновление маршрутов в `./routes/web.php` Добавление маршрута к этому новому контроллеру
+1. Обновите маршруты в файле **./раутес/веб.ФП** , чтобы добавить маршрут к этому новому контроллеру.
 
-```php
-Route::get('/calendar', 'CalendarController@calendar');
-```
+    ```php
+    Route::get('/calendar', 'CalendarController@calendar');
+    ```
 
-Теперь вы можете протестировать это. Войдите и щелкните ссылку **Календарь** на панели навигации. Если все работает, вы должны увидеть дамп событий JSON в календаре пользователя.
+1. Войдите и щелкните ссылку **Календарь** на панели навигации. Если все работает, вы должны увидеть дамп событий JSON в календаре пользователя.
 
 ## <a name="display-the-results"></a>Отображение результатов
 
-Теперь вы можете добавить представление для отображения результатов более удобным для пользователя способом. Создайте новый файл в `./resources/views` каталоге `calendar.blade.php` и добавьте указанный ниже код.
+Теперь вы можете добавить представление для отображения результатов более удобным для пользователя способом.
 
-```php
-@extends('layout')
+1. Создайте новый файл в каталоге **./ресаурцес/виевс** `calendar.blade.php` и добавьте указанный ниже код.
 
-@section('content')
-<h1>Calendar</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Organizer</th>
-      <th scope="col">Subject</th>
-      <th scope="col">Start</th>
-      <th scope="col">End</th>
-    </tr>
-  </thead>
-  <tbody>
-    @isset($events)
-      @foreach($events as $event)
-        <tr>
-          <td>{{ $event->getOrganizer()->getEmailAddress()->getName() }}</td>
-          <td>{{ $event->getSubject() }}</td>
-          <td>{{ \Carbon\Carbon::parse($event->getStart()->getDateTime())->format('n/j/y g:i A') }}</td>
-          <td>{{ \Carbon\Carbon::parse($event->getEnd()->getDateTime())->format('n/j/y g:i A') }}</td>
-        </tr>
-      @endforeach
-    @endif
-  </tbody>
-</table>
-@endsection
-```
+    :::code language="php" source="../demo/graph-tutorial/resources/views/calendar.blade.php" id="CalendarSnippet":::
 
-Это приведет к перебору коллекции событий и добавлению строки таблицы для каждой из них. Удалите `return response()->json($events);` строку из `calendar` действия в `./app/Http/Controllers/CalendarController.php`и замените ее на приведенный ниже код.
+    Это приведет к перебору коллекции событий и добавлению строки таблицы для каждой из них.
 
-```php
-$viewData['events'] = $events;
-return view('calendar', $viewData);
-```
+1. Удалите `return response()->json($events);` строку из `calendar` действия в файле **./АПП/хттп/контроллерс/календарконтроллер.ФП**и замените ее на приведенный ниже код.
 
-Обновите страницу, после чего приложение должно отобразить таблицу событий.
+    ```php
+    $viewData['events'] = $events;
+    return view('calendar', $viewData);
+    ```
 
-![Снимок экрана с таблицей событий](./images/add-msgraph-01.png)
+1. Обновите страницу, после чего приложение должно отобразить таблицу событий.
+
+    ![Снимок экрана с таблицей событий](./images/add-msgraph-01.png)
