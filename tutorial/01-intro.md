@@ -8,7 +8,7 @@
 > - Скачайте [Краткое руководство по PHP](https://developer.microsoft.com/graph/quick-start?platform=option-php) , чтобы получить рабочий код в минутах.
 > - Скачайте или скопируйте [репозиторий GitHub](https://github.com/microsoftgraph/msgraph-training-phpapp).
 
-## <a name="prerequisites"></a>Необходимые компоненты
+## <a name="prerequisites"></a>Предварительные требования
 
 Прежде чем приступить к работе с этим руководством, на компьютере для разработки должен быть установлен [PHP](http://php.net/downloads.php), [Composer](https://getcomposer.org/)и [ларавел](https://laravel.com/) .
 
