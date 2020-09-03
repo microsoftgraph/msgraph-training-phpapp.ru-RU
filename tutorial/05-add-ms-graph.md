@@ -4,7 +4,13 @@
 
 ## <a name="get-calendar-events-from-outlook"></a>Получение событий календаря из Outlook
 
-1. Создайте новый файл в каталоге **./АПП/хттп/контроллерс** с именем `CalendarController.php`и добавьте следующий код.
+1. Создайте каталог в каталоге **./АПП** с именем `TimeZones` , затем создайте в этом каталоге новый файл с именем `TimeZones.php` и добавьте приведенный ниже код.
+
+    :::code language="php" source="../demo/graph-tutorial/app/TimeZones/TimeZones.php":::
+
+    Этот класс реализует упрощенное сопоставление имен часовых поясов Windows с идентификаторами часовых поясов IANA.
+
+1. Создайте новый файл в каталоге **./АПП/хттп/контроллерс** с именем `CalendarController.php` и добавьте следующий код.
 
     ```php
     <?php
@@ -16,6 +22,7 @@
     use Microsoft\Graph\Graph;
     use Microsoft\Graph\Model;
     use App\TokenStore\TokenCache;
+    use App\TimeZones\TimeZones;
 
     class CalendarController extends Controller
     {
@@ -23,6 +30,42 @@
       {
         $viewData = $this->loadViewData();
 
+        $graph = $this->getGraph();
+
+        // Get user's timezone
+        $timezone = TimeZones::getTzFromWindows($viewData['userTimeZone']);
+
+        // Get start and end of week
+        $startOfWeek = new \DateTimeImmutable('sunday -1 week', $timezone);
+        $endOfWeek = new \DateTimeImmutable('sunday', $timezone);
+
+        $queryParams = array(
+          'startDateTime' => $startOfWeek->format(\DateTimeInterface::ISO8601),
+          'endDateTime' => $endOfWeek->format(\DateTimeInterface::ISO8601),
+          // Only request the properties used by the app
+          '$select' => 'subject,organizer,start,end',
+          // Sort them by start time
+          '$orderby' => 'start/dateTime',
+          // Limit results to 25
+          '$top' => 25
+        );
+
+        // Append query parameters to the '/me/calendarView' url
+        $getEventsUrl = '/me/calendarView?'.http_build_query($queryParams);
+
+        $events = $graph->createRequest('GET', $getEventsUrl)
+          // Add the user's timezone to the Prefer header
+          ->addHeaders(array(
+            'Prefer' => 'outlook.timezone="'.$viewData['userTimeZone'].'"'
+          ))
+          ->setReturnType(Model\Event::class)
+          ->execute();
+
+        return response()->json($events);
+      }
+
+      private function getGraph(): Graph
+      {
         // Get the access token from the cache
         $tokenCache = new TokenCache();
         $accessToken = $tokenCache->getAccessToken();
@@ -30,29 +73,19 @@
         // Create a Graph client
         $graph = new Graph();
         $graph->setAccessToken($accessToken);
-
-        $queryParams = array(
-          '$select' => 'subject,organizer,start,end',
-          '$orderby' => 'createdDateTime DESC'
-        );
-
-        // Append query parameters to the '/me/events' url
-        $getEventsUrl = '/me/events?'.http_build_query($queryParams);
-
-        $events = $graph->createRequest('GET', $getEventsUrl)
-          ->setReturnType(Model\Event::class)
-          ->execute();
-
-        return response()->json($events);
+        return $graph;
       }
     }
     ```
 
     Рассмотрите, что делает этот код.
 
-    - URL-адрес, который будет вызываться — это `/v1.0/me/events`.
-    - `$select` Параметр позволяет ограничить поля, возвращаемые для каждого события, только теми, которые будут реально использоваться представлением.
-    - `$orderby` Параметр сортирует результаты по дате и времени создания, начиная с самого последнего элемента.
+    - URL-адрес, который будет вызываться — это `/v1.0/me/calendarView` .
+    - `startDateTime`Параметры и `endDateTime` задают начало и конец представления.
+    - `$select`Параметр позволяет ограничить поля, возвращаемые для каждого события, только теми, которые будут реально использоваться представлением.
+    - `$orderby`Параметр сортирует результаты по дате и времени создания, начиная с самого последнего элемента.
+    - `$top`Параметр ограничит результаты до 25 событий.
+    - `Prefer: outlook.timezone=""`Заголовок приводит к тому, что время начала и окончания в отклике изменяется на предпочтительный часовой пояс пользователя.
 
 1. Обновите маршруты в файле **./раутес/веб.ФП** , чтобы добавить маршрут к этому новому контроллеру.
 

@@ -23,6 +23,12 @@
 - [OAuth2 — клиент](https://github.com/thephpleague/oauth2-client) для обработки потоков маркеров входа и маркеров OAuth.
 - [Microsoft](https://github.com/microsoftgraph/msgraph-sdk-php) Graph для совершения звонков в Microsoft Graph.
 
+1. Выполните следующую команду, чтобы удалить существующую версию `guzzlehttp/guzzle` . Версия, установленная с помощью Ларавел, вступает в противоречие с версией, необходимой пакету SDK для Microsoft Graph PHP.
+
+    ```Shell
+    composer remove guzzlehttp/guzzle
+    ```
+
 1. Выполните следующую команду в командной панели CLI.
 
     ```Shell
@@ -37,7 +43,7 @@
 
     В этом коде добавляется [Начальная](http://getbootstrap.com/) загрузка для простых стилей и [Шрифт Awesome](https://fontawesome.com/) для некоторых простых значков. Он также определяет глобальную структуру с помощью панели навигации.
 
-1. Создайте `./public` новый каталог в каталоге с именем `css`, а затем создайте новый файл в `./public/css` каталоге с именем. `app.css` Добавьте в него указанный ниже код.
+1. Создайте новый каталог в `./public` каталоге с именем `css` , а затем создайте новый файл в `./public/css` каталоге с именем `app.css` . Добавьте в него указанный ниже код.
 
     :::code language="css" source="../demo/graph-tutorial/public/css/app.css":::
 
