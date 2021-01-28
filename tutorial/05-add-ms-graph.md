@@ -4,7 +4,7 @@
 
 ## <a name="get-calendar-events-from-outlook"></a>Получить события календаря из Outlook
 
-1. Создайте новый каталог в **каталоге ./app** с именем , а затем создайте новый файл с именем и `TimeZones` добавьте следующий `TimeZones.php` код.
+1. Создайте новый каталог в **каталоге ./app** с именем, затем создайте новый файл в этом каталоге с именем и добавьте `TimeZones` следующий `TimeZones.php` код.
 
     :::code language="php" source="../demo/graph-tutorial/app/TimeZones/TimeZones.php":::
 
@@ -38,6 +38,8 @@
         // Get start and end of week
         $startOfWeek = new \DateTimeImmutable('sunday -1 week', $timezone);
         $endOfWeek = new \DateTimeImmutable('sunday', $timezone);
+
+        $viewData['dateRange'] = $startOfWeek->format('M j, Y').' - '.$endOfWeek->format('M j, Y');
 
         $queryParams = array(
           'startDateTime' => $startOfWeek->format(\DateTimeInterface::ISO8601),

@@ -4,12 +4,16 @@
 
 1. Откройте **ENV-файл** в корневом файле приложения PHP и добавьте следующий код в конец файла.
 
-    :::code language="ini" source="../demo/graph-tutorial/example.env" range="48-54":::
+    :::code language="ini" source="../demo/graph-tutorial/example.env" range="51-57":::
 
-1. Замените код приложения на портале регистрации приложений `YOUR_APP_ID_HERE` и пароль, `YOUR_APP_PASSWORD_HERE` созданный вами.
+1. Замените код приложения на портале регистрации приложений `YOUR_APP_ID_HERE` и пароль, `YOUR_APP_SECRET_HERE` созданный вами.
 
     > [!IMPORTANT]
-    > Если вы используете управление исходным кодом, например git, пришло бы время исключить файл из системы управления источником, чтобы избежать случайной утечки ИД приложения и `.env` пароля.
+    > Если вы используете управление исходным кодом, например git, пришло бы время исключить файл из системы управления исходным кодом, чтобы не допустить случайной утечки вашего ИД приложения `.env` и пароля.
+
+1. Создайте новый файл в папке **./config** с именем `azure.php` и добавьте следующий код.
+
+    :::code language="php" source="../demo/graph-tutorial/config/azure.php":::
 
 ## <a name="implement-sign-in"></a>Реализация входов
 
@@ -29,13 +33,13 @@
       {
         // Initialize the OAuth client
         $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
-          'clientId'                => env('OAUTH_APP_ID'),
-          'clientSecret'            => env('OAUTH_APP_PASSWORD'),
-          'redirectUri'             => env('OAUTH_REDIRECT_URI'),
-          'urlAuthorize'            => env('OAUTH_AUTHORITY').env('OAUTH_AUTHORIZE_ENDPOINT'),
-          'urlAccessToken'          => env('OAUTH_AUTHORITY').env('OAUTH_TOKEN_ENDPOINT'),
+          'clientId'                => config('azure.appId'),
+          'clientSecret'            => config('azure.appSecret'),
+          'redirectUri'             => config('azure.redirectUri'),
+          'urlAuthorize'            => config('azure.authority').config('azure.authorizeEndpoint'),
+          'urlAccessToken'          => config('azure.authority').config('azure.tokenEndpoint'),
           'urlResourceOwnerDetails' => '',
-          'scopes'                  => env('OAUTH_SCOPES')
+          'scopes'                  => config('azure.scopes')
         ]);
 
         $authUrl = $oauthClient->getAuthorizationUrl();
@@ -71,13 +75,13 @@
         if (isset($authCode)) {
           // Initialize the OAuth client
           $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
-            'clientId'                => env('OAUTH_APP_ID'),
-            'clientSecret'            => env('OAUTH_APP_PASSWORD'),
-            'redirectUri'             => env('OAUTH_REDIRECT_URI'),
-            'urlAuthorize'            => env('OAUTH_AUTHORITY').env('OAUTH_AUTHORIZE_ENDPOINT'),
-            'urlAccessToken'          => env('OAUTH_AUTHORITY').env('OAUTH_TOKEN_ENDPOINT'),
+            'clientId'                => config('azure.appId'),
+            'clientSecret'            => config('azure.appSecret'),
+            'redirectUri'             => config('azure.redirectUri'),
+            'urlAuthorize'            => config('azure.authority').config('azure.authorizeEndpoint'),
+            'urlAccessToken'          => config('azure.authority').config('azure.tokenEndpoint'),
             'urlResourceOwnerDetails' => '',
-            'scopes'                  => env('OAUTH_SCOPES')
+            'scopes'                  => config('azure.scopes')
           ]);
 
           try {
@@ -107,7 +111,7 @@
 
     Он определяет контроллер с двумя действиями: `signin` и `callback` .
 
-    Это действие создает URL-адрес для подписи Azure AD, сохраняет значение, сгенерированное клиентом OAuth, а затем перенаправляет браузер на страницу для подписи `signin` `state` Azure AD.
+    Это действие создает URL-адрес для подписи Azure AD, сохраняет значение, сформированное клиентом OAuth, а затем перенаправляет браузер на страницу для регистрации `signin` `state` Azure AD.
 
     Это `callback` действие перенаправляет Azure после завершения регистрации. Это действие позволяет убедиться, что значение совпадает с сохраненным значением, а затем пользователи код авторизации, отправленный `state` Azure для запроса маркера доступа. Затем он перенаправляется обратно на домашную страницу с маркером доступа во временном значении ошибки. Вы будете использовать его, чтобы убедиться, что вход работает, прежде чем двигаться дальше.
 
@@ -169,7 +173,7 @@
 
 Теперь, когда вы можете получить маркеры, пора реализовать способ их хранения в приложении. Так как это пример приложения, для простоты вы храните их в сеансе. В реальных приложениях используется более надежное решение для безопасного хранения данных, например база данных.
 
-1. Создайте новый каталог в **каталоге ./app** с именем , а затем создайте новый файл с именем и `TokenStore` добавьте следующий `TokenCache.php` код.
+1. Создайте новый каталог в **каталоге ./app** с именем, затем создайте новый файл в этом каталоге с именем и добавьте `TokenStore` следующий `TokenCache.php` код.
 
     ```php
     <?php
